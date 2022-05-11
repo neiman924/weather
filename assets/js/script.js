@@ -121,8 +121,8 @@ function searchLatLon(cityName) {
     .then(function (locRes) {
       // write query to page so user knows what they are viewing
       // resultTextEl.textContent = locRes.search.query;
-      console.log(locRes);
-      console.log(locRes.length);
+      // console.log(locRes);
+      //console.log(locRes.length);
       if (!locRes.length) {
         console.log('No results found!');
         resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
@@ -172,7 +172,8 @@ function searchWeather(lat,lon) {
           //for (var i = 1; i<=5;i++){
           // write query to page so user knows what they are viewing
           // resultTextEl.textContent = locRes.search.query;
-          console.log(locRes);
+          console.log(locRes['daily']);
+          console.log(locRes['daily'][0]['temp']['day']);
           if (!locRes) {
             console.log('No results found!');
             alert('No results found!');
@@ -181,6 +182,9 @@ function searchWeather(lat,lon) {
             resultContentEl.textContent = '';
             for (var i = 0; i < locRes.length; i++) {
               
+              var test = locRes[i].daily.temp;
+              console.log(test);
+
               lat = locRes[i].lat;
               lon = locRes[i].lon;
               console.log('Lat = ',lat,'lon = ' , lon);
