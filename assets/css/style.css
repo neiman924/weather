@@ -49,12 +49,36 @@ img{
   border-style: solid;
   margin-bottom: 50px;
   
-  background-image:url('../../assets/img/sunny.gif'); 
+  /* background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/default.gif');  */
   background-repeat: no-repeat;
   background-size: auto;
- 
-
 }
+
+.sunny{
+  background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/sunny.gif'); 
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
+}
+.rainy{
+  background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/rain.gif'); 
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
+}
+.cloudy{
+  background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/cloudy.gif'); 
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
+}
+.default{
+  background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/default.gif'); 
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
+}
+
 .products {
   display:flex;
   flex-flow: wrap; 

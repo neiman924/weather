@@ -142,6 +142,8 @@ function searchWeather(lat,lon) {
           dailyWeather.dailyHumidity = locRes['daily'][0]['humidity'];
           dailyWeather.dailyUv = locRes['daily'][0]['uvi'];
           dailyWeather.wIcon = locRes['daily'][0]['weather'][0]['icon'];
+          dailyWeather.weather = locRes['daily'][0]['weather'][0]['main'];
+
 
           // console.log(dailyWeather);
 
@@ -174,7 +176,7 @@ function searchWeather(lat,lon) {
                 fiveDay.fDay = locRes['daily'][i]['dt'];
                 fiveDay.weather = locRes['daily'][i]['weather'][0]['main'];
                 console.log(fiveDay);
-                printResults5Days(fiveDay);
+                printResults5Days(fiveDay,i);
               }
           }
         })
@@ -206,6 +208,17 @@ function printResultsCurrentDay(resultObj) {
   // resultCard.classList.add('bg-light');
   var resultBody = document.createElement('figure');
   resultBody.classList.add('daycard');
+
+  if(resultObj.weather === 'Clear'){
+    resultBody.classList.add('sunny');
+  } else if(resultObj.weather === 'Rain'){
+    resultBody.classList.add('rainy');
+  } else if(resultObj.weather === 'Clouds'){
+    resultBody.classList.add('cloudy');
+  }else{
+    resultBody.classList.add('default');
+  }
+
   resultCard.append(resultBody);
   //-------------------http://openweathermap.org/img/wn/10d@2x.png-----------------------------
   var weatherIcon = '<img src="http://openweathermap.org/img/wn/' + resultObj.wIcon + '.png">';
@@ -229,7 +242,7 @@ function printResultsCurrentDay(resultObj) {
   resultContentEl.append(resultCard);
 }
 //-----------------------------------------------------------------------------------------
-function printResults5Days(resultObj) {
+function printResults5Days(resultObj,i) {
   // console.log(resultObj);
   // console.log(cityName);
       // set up `<div>` to hold result content
@@ -237,24 +250,26 @@ function printResults5Days(resultObj) {
       resultCard.classList.add('row', 'justify-center');
       //-------------------http://openweathermap.org/img/wn/10d@2x.png-----------------------------
       var weatherIcon = '<img src="http://openweathermap.org/img/wn/' + resultObj.fIcon + '.png">';
-      //-------------------------------------------------------------------------------------------
-console.log(resultObj.weather);
-document.getElementById("result-day").style.backgroundImage = "url('./assets/img/sunnny.gif')";
-
-      if(resultObj.weather === 'Clear'){
-        $("fDaycard").css("background-image", "url('./assets/img/sunny.gif')");
-      } else if(resultObj.weather === 'Rain'){
-        $("fDaycard").css("background-image", "url('./assets/img/rain.gif')");
-      } else if(resultObj.weather === 'Clouds'){
-        $("fDaycard").css("background-image", "url('../assets/img/cloudy.gif')");
-      }else{
-        $("fDaycard").css("background-image", "url('../assets/img/default.gif')");
-      }
+ 
 
     //-----------------------------------------------------------------------------------------
 
       var resultBody = document.createElement('figure');
       resultBody.classList.add('fDaycard');
+      resultBody.setAttribute('id','card'+i);
+    //-------------------------------------------------------------------------------------------
+      console.log(resultObj.weather);
+
+      if(resultObj.weather === 'Clear'){
+        resultBody.classList.add('sunny');
+      } else if(resultObj.weather === 'Rain'){
+        resultBody.classList.add('rainy');
+      } else if(resultObj.weather === 'Clouds'){
+        resultBody.classList.add('cloudy');
+      }else{
+        resultBody.classList.add('default');
+      }
+      //-----------------------------------------------------------------------------------------
       resultCard.append(resultBody);
 
       var titleEl = document.createElement('h3');
