@@ -59,18 +59,21 @@ img{
   background-repeat: no-repeat;
   background-size: auto;
   background-size: 100% 100%;
+  color:black;
 }
 .rainy{
   background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/rain.gif'); 
   background-repeat: no-repeat;
   background-size: auto;
   background-size: 100% 100%;
+  color:gray;
 }
 .cloudy{
   background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/cloudy.gif'); 
   background-repeat: no-repeat;
   background-size: auto;
   background-size: 100% 100%;
+  color:gray;
 }
 .default{
   background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/default.gif'); 
