@@ -13,10 +13,11 @@
 
 //-----------------------------------------------------------------------------------------
 var resultTextEl = document.querySelector('#result-text');
-var resultContentEl = document.querySelector('#result-content');
+var resultContentEl = document.querySelector('#result-day');
+var resultContentE2 = document.querySelector('#result-5day');
 var searchFormEl = document.querySelector('#search-form');
 //------------------var to hold geoLocation------------------------------------------------
-var lat,lon;
+var lat,lon,cityName = 'Seattle';
 //-----------------------------default location---------------------------------------------
 function getLocation() {
   if (navigator.geolocation) {
@@ -26,6 +27,10 @@ function getLocation() {
    lon = '-122.3300624';
    searchWeather(lat,lon);
   }
+  
+  $.get("http://ipinfo.io", function(response) {
+    cityName = response.city;
+    }, "jsonp");
 }
 //------------------------set the current city location and call search weather fun--------
 function setDefaultPosition(position) {
@@ -61,50 +66,6 @@ function showError(error) {
 //---------------------appid for openweather ----------------------------------------------
 var appid = '&appid=022143c121bb477d4aec6b482ca51234';
 //-----------------------------------------------------------------------------------------
-function printResults(resultObj) {
-  console.log(resultObj);
-
-  // set up `<div>` to hold result content
-  var resultCard = document.createElement('div');
-  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
-
-  var resultBody = document.createElement('div');
-  resultBody.classList.add('card-body');
-  resultCard.append(resultBody);
-
-  var titleEl = document.createElement('h3');
-  titleEl.textContent = resultObj.title;
-
-  var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
-    '<strong>Date:</strong> ' + resultObj.date + '<br/>';
-
-  if (resultObj.subject) {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> No subject for this entry.';
-  }
-
-  if (resultObj.description) {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong> ' + resultObj.description[0];
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong>  No description for this entry.';
-  }
-
-  var linkButtonEl = document.createElement('a');
-  linkButtonEl.textContent = 'Read More';
-  linkButtonEl.setAttribute('href', resultObj.url);
-  linkButtonEl.classList.add('btn', 'btn-dark');
-
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl);
-
-  resultContentEl.append(resultCard);
-}
-//-----------------------------------------------------------------------------------------
 //1-  http://api.openweathermap.org/geo/1.0/direct?q=seattle&appid=022143c121bb477d4aec6b482ca51234
 //---------------------------searchLatLon--------------------------------------------
 function searchLatLon(cityName) {
@@ -135,7 +96,6 @@ function searchLatLon(cityName) {
           console.log('Lat = ',lat,'lon = ' , lon);
 
           searchWeather(lat,lon);
-          //printResults(locRes[i]);
         }
       }
     })
@@ -174,23 +134,48 @@ function searchWeather(lat,lon) {
           // resultTextEl.textContent = locRes.search.query;
           console.log(locRes['daily']);
           console.log(locRes['daily'][0]['temp']['day']);
+
+          var dailyWeather = {};
+
+          dailyWeather.dayilyTemp = locRes['daily'][0]['temp']['day'];
+          dailyWeather.dailyWind = locRes['daily'][0]['wind_speed'];
+          dailyWeather.dailyHumidity = locRes['daily'][0]['humidity'];
+          dailyWeather.dailyUv = locRes['daily'][0]['uvi'];
+          dailyWeather.wIcon = locRes['daily'][0]['weather'][0]['icon'];
+
+          // console.log(dailyWeather);
+
+          var fiveDay = {};
+
+
+         // console.log(fiveDay);
+
+         // console.log(locRes['daily'][0]['weather'][0]['main']);
           if (!locRes) {
             console.log('No results found!');
             alert('No results found!');
-            resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
+            //resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
           } else {
-            resultContentEl.textContent = '';
-            for (var i = 0; i < locRes.length; i++) {
+            //resultContentEl.textContent = '';
+            // for (var i = 0; i < locRes.length; i++) {
               
-              var test = locRes[i].daily.temp;
-              console.log(test);
-
-              lat = locRes[i].lat;
-              lon = locRes[i].lon;
-              console.log('Lat = ',lat,'lon = ' , lon);
-
-              printResults(locRes[i]);
-            }
+            //   var test = locRes[i].daily.temp;
+            //   console.log(test);
+              lat = locRes.lat;
+              lon = locRes.lon;
+              //console.log('Lat = ',lat,'lon = ' , lon);
+              printResultsCurrentDay(dailyWeather);
+              for (var i = 1;i<6;i++){
+                fiveDay.fTemp = locRes['daily'][i]['temp']['day'];
+                fiveDay.fWind = locRes['daily'][i]['wind_speed'];
+                fiveDay.fHumidity = locRes['daily'][i]['humidity'];
+                fiveDay.fUv = locRes['daily'][i]['uvi'];
+                fiveDay.fIcon = locRes['daily'][i]['weather'][0]['icon'];
+                fiveDay.fDay = locRes['daily'][i]['dt'];
+                fiveDay.weather = locRes['daily'][i]['weather'][0]['main'];
+                console.log(fiveDay);
+                printResults5Days(fiveDay);
+              }
           }
         })
         .catch(function (error) {
@@ -203,12 +188,90 @@ function searchWeather(lat,lon) {
 //-----------------------------------------------------------------------------------------
 function handleFormSubmit(event) {
   event.preventDefault();
-  var cityName = document.querySelector('#search-input').value;
+  cityName = document.querySelector('#search-input').value;
   if (!cityName) {
     alert('You need a search input value!');
     return;
   }
+  resultContentEl.textContent = '';
+  resultContentE2.textContent = '';
   searchLatLon(cityName);
+}
+//-----------------------------------------------------------------------------------------
+function printResultsCurrentDay(resultObj) {
+  console.log(resultObj);
+  console.log(cityName);
+  // set up `<div>` to hold result content
+  var resultCard = document.createElement('div');
+  // resultCard.classList.add('bg-light');
+  var resultBody = document.createElement('figure');
+  resultBody.classList.add('daycard');
+  resultCard.append(resultBody);
+  //-------------------http://openweathermap.org/img/wn/10d@2x.png-----------------------------
+  var weatherIcon = '<img src="http://openweathermap.org/img/wn/' + resultObj.wIcon + '.png">';
+  //-------------------------------------------------------------------------------------------
+  var titleEl = document.createElement('h2');
+  titleEl.innerHTML =
+   cityName + " " +"("+ moment().format('MM/DD/YYYY')+")" + 
+   weatherIcon
+  ;
+
+  var bodyContentEl = document.createElement('p');
+  bodyContentEl.innerHTML =
+    '<strong>Temp: </strong> ' + resultObj.dayilyTemp + ' °F' + '<br/>' + 
+    '<strong>Wind: </strong> ' + resultObj.dailyWind + ' MPH' + '<br/>' +
+    '<strong>Humidity: </strong> ' + resultObj.dailyHumidity + ' %' + '<br/>' +
+    '<strong>UV Index: </strong> ' + resultObj.dailyUv + '<br/>'
+    ;
+
+  resultBody.append(titleEl, bodyContentEl);
+
+  resultContentEl.append(resultCard);
+}
+//-----------------------------------------------------------------------------------------
+function printResults5Days(resultObj) {
+  // console.log(resultObj);
+  // console.log(cityName);
+      // set up `<div>` to hold result content
+      var resultCard = document.createElement('div');
+      resultCard.classList.add('row', 'justify-center');
+      //-------------------http://openweathermap.org/img/wn/10d@2x.png-----------------------------
+      var weatherIcon = '<img src="http://openweathermap.org/img/wn/' + resultObj.fIcon + '.png">';
+      //-------------------------------------------------------------------------------------------
+console.log(resultObj.weather);
+document.getElementById("result-day").style.backgroundImage = "url('./assets/img/sunnny.gif')";
+
+      if(resultObj.weather === 'Clear'){
+        $("fDaycard").css("background-image", "url('./assets/img/sunny.gif')");
+      } else if(resultObj.weather === 'Rain'){
+        $("fDaycard").css("background-image", "url('./assets/img/rain.gif')");
+      } else if(resultObj.weather === 'Clouds'){
+        $("fDaycard").css("background-image", "url('../assets/img/cloudy.gif')");
+      }else{
+        $("fDaycard").css("background-image", "url('../assets/img/default.gif')");
+      }
+
+    //-----------------------------------------------------------------------------------------
+
+      var resultBody = document.createElement('figure');
+      resultBody.classList.add('fDaycard');
+      resultCard.append(resultBody);
+
+      var titleEl = document.createElement('h3');
+      titleEl.innerHTML =
+      moment.unix(resultObj.fDay).format('DD/MM/YYYY') + weatherIcon;
+
+      var bodyContentEl = document.createElement('p');
+      bodyContentEl.innerHTML =
+        '<strong>Temp: </strong> ' + resultObj.fTemp + ' °F' + '<br/>' + 
+        '<strong>Wind: </strong> ' + resultObj.fWind + ' MPH' + '<br/>' +
+        '<strong>Humidity: </strong> ' + resultObj.fHumidity + ' %' + '<br/>' +
+        '<strong>UV Index: </strong> ' + resultObj.fUv + '<br/>'
+        ;
+
+      resultBody.append(titleEl, bodyContentEl);
+
+      resultContentE2.append(resultCard);
 }
 //-----------------------------------------------------------------------------------------
 searchFormEl.addEventListener('submit', handleFormSubmit);

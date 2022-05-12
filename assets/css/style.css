@@ -11,3 +11,75 @@ h6 {
   font-family: 'Merriweather', serif;
   font-weight: 700;
 }
+header {
+  padding: 3%;
+  background-color: #010101;
+  color: white;
+  text-shadow: 5px 2px black;
+  background-image:url('../../assets/img/header.gif');
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
+}
+img{
+  vertical-align:middle;
+}
+.daycard {
+  border-width: 1px;
+  border-color: #fff;
+  padding: 2%;
+  flex: 0 0 5%;
+  box-shadow: 0 -10 5px #ffffffee;
+  border-radius: 10px;
+  border-style: solid;
+  margin-bottom: 50px;
+  background-image:url('../../assets/img/cloudy.gif');
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
+
+}
+.fDaycard {
+  border-width: 1px;
+  border-color: #fff;
+  padding: 2%;
+  flex: 0 0 5%;
+  box-shadow: 0 -10 5px #ffffffee;
+  border-radius: 10px;
+  border-style: solid;
+  margin-bottom: 50px;
+  
+  background-image:url('../../assets/img/sunny.gif'); 
+  background-repeat: no-repeat;
+  background-size: auto;
+ 
+
+}
+.products {
+  display:flex;
+  flex-flow: wrap; 
+  flex: 3;
+  padding: 0 5% ;
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:space-evenly;
+  align-items: flex-start;
+  text-shadow: 0 0 3px #010101;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.column{
+display: flex;
+flex-direction: column;
+}
+.grid
+{
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(12, 1fr);
+}
