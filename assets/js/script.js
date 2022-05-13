@@ -322,7 +322,7 @@ function printResults5Days(resultObj,i) {
 
       var titleEl = document.createElement('h3');
       titleEl.innerHTML =
-      moment.unix(resultObj.fDay).format('DD/MM/YYYY') + weatherIcon;
+      moment.unix(resultObj.fDay).format('MM/DD/YYYY') + weatherIcon;
 
       var bodyContentEl = document.createElement('p');
       bodyContentEl.innerHTML =
