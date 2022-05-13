@@ -1,5 +1,9 @@
 body {
   font-family: 'Fira Sans', sans-serif;
+  background-image:url('../../assets/img/header.gif');
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-size: 100% 100%;
 }
 
 h1,
@@ -49,9 +53,22 @@ img{
   border-style: solid;
   margin-bottom: 50px;
   
-  /* background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/default.gif');  */
+  background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/default.gif'); 
   background-repeat: no-repeat;
   background-size: auto;
+}
+.ux {
+  margin-top: 1%;
+  display: inline;
+  border-width: 1px;
+  width: 2%;
+  padding: 0.5%;
+  border-color: #fff;
+  box-shadow: 0 -10 5px #ffffffee;
+  border-radius: 10px;
+  border-style: none;
+  background-color: blue;
+  color: white;
 }
 
 .sunny{
@@ -66,14 +83,14 @@ img{
   background-repeat: no-repeat;
   background-size: auto;
   background-size: 100% 100%;
-  color:gray;
+  color:lightgray;
 }
 .cloudy{
   background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/cloudy.gif'); 
   background-repeat: no-repeat;
   background-size: auto;
   background-size: 100% 100%;
-  color:gray;
+  color:lightgray;
 }
 .default{
   background-image:url('https://raw.githubusercontent.com/neiman924/weather/main/assets/img/default.gif'); 
@@ -94,7 +111,9 @@ img{
   align-items: flex-start;
   text-shadow: 0 0 3px #010101;
 }
-
+.margin{
+  margin-bottom: 1%;
+}
 .row{
   display: flex;
   flex-direction: row;

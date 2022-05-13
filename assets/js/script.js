@@ -16,21 +16,49 @@ var resultTextEl = document.querySelector('#result-text');
 var resultContentEl = document.querySelector('#result-day');
 var resultContentE2 = document.querySelector('#result-5day');
 var searchFormEl = document.querySelector('#search-form');
+var searchFormE2;
+var searchBody = document.querySelector('#search-body');
+var citynameHistory = [];
+
 //------------------var to hold geoLocation------------------------------------------------
 var lat,lon,cityName = 'Seattle';
 //-----------------------------default location---------------------------------------------
 function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(setDefaultPosition, showError);
-  } else { 
-   lat = '47.6038321';
-   lon = '-122.3300624';
-   searchWeather(lat,lon);
+//-----------------------------city name history in getLocation function--------------------
+    citynameHistory = localStorage.getItem("citynameHistory");
+    if (citynameHistory == undefined){
+      localStorage.setItem('citynameHistory',JSON.stringify([citynameHistory]));
+      citynameHistory = [];
+    }else{
+      citynameHistory = JSON.parse(localStorage.getItem('citynameHistory'));
+      console.log(citynameHistory);
+      for(var i=0;i<citynameHistory.length;i++){
+        searchHistory(citynameHistory[i]);
+      }
+    }
+//-----------------------------------------------------------------------------------------
+  var gParameter = getParams();
+  console.log(gParameter);
+
+  if (gParameter != '')
+  { 
+    cityName = gParameter;
+    searchLatLon(gParameter);
+  }else{
+
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(setDefaultPosition, showError);
+     } else { 
+      lat = '47.6038321';
+      lon = '-122.3300624';
+      searchWeather(lat,lon);
+      }
+      
+      $.get("http://ipinfo.io", function(response) {
+        cityName = response.city;
+        }, "jsonp");
   }
-  
-  $.get("http://ipinfo.io", function(response) {
-    cityName = response.city;
-    }, "jsonp");
 }
 //------------------------set the current city location and call search weather fun--------
 function setDefaultPosition(position) {
@@ -191,6 +219,21 @@ function searchWeather(lat,lon) {
 function handleFormSubmit(event) {
   event.preventDefault();
   cityName = document.querySelector('#search-input').value;
+  citynameHistory.unshift(cityName);
+  localStorage.setItem('citynameHistory',JSON.stringify(citynameHistory));
+  if (!cityName) {
+    alert('You need a search input value!');
+    return;
+  }
+  resultContentEl.textContent = '';
+  resultContentE2.textContent = '';
+  searchLatLon(cityName);
+}
+//-----------------------------------------------------------------------------------------
+function handleHistorySubmit(event) {
+  console.log('handleHistorySubmit');
+  event.preventDefault();
+  cityName = document.querySelector('#search-body').value;
   if (!cityName) {
     alert('You need a search input value!');
     return;
@@ -234,12 +277,17 @@ function printResultsCurrentDay(resultObj) {
     '<strong>Temp: </strong> ' + resultObj.dayilyTemp + ' °F' + '<br/>' + 
     '<strong>Wind: </strong> ' + resultObj.dailyWind + ' MPH' + '<br/>' +
     '<strong>Humidity: </strong> ' + resultObj.dailyHumidity + ' %' + '<br/>' +
-    '<strong>UV Index: </strong> ' + resultObj.dailyUv + '<br/>'
+    '<strong style="margin-top: 0.5%;">UV Index: </strong> ' + '<p class="ux">' + resultObj.dailyUv + '</p>' + '<br/>'
     ;
 
   resultBody.append(titleEl, bodyContentEl);
 
   resultContentEl.append(resultCard);
+
+  searchHistory(cityName);
+  // for(var i=0;i<citynameHistory.length;i++){
+  //   searchHistory(citynameHistory[i]);
+  // }
 }
 //-----------------------------------------------------------------------------------------
 function printResults5Days(resultObj,i) {
@@ -288,8 +336,35 @@ function printResults5Days(resultObj,i) {
 
       resultContentE2.append(resultCard);
 }
+
+
+//------------------------------search history-------------------------------------------
+function searchHistory(resultObj) {
+  console.log(resultObj);
+      var linkButtonEl = document.createElement('a');
+      var url = 'index.html?cityname=' + resultObj;
+      linkButtonEl.textContent = resultObj;
+      linkButtonEl.setAttribute('id',resultObj);
+      linkButtonEl.setAttribute('href', url);
+      linkButtonEl.classList.add('btn', 'btn-dark','column','margin','btn-info', 'btn-block');
+
+      searchBody.prepend(linkButtonEl);
+      
+}
+//----------------------------get Params from url------------------------------------------
+function getParams() {
+  var searchParamsArr = document.location.search.split('=').pop();
+  console.log(searchParamsArr);
+  return searchParamsArr;
+  // Get the query and format values
+  //cityName = searchParamsArr[0].split('=').pop();
+
+  //searchApi(query, format);
+}
 //-----------------------------------------------------------------------------------------
 searchFormEl.addEventListener('submit', handleFormSubmit);
+//-----------------------------------------------------------------------------------------
+searchBody.addEventListener('submit', handleHistorySubmit);
 //------------------------------auto complate generate city--------------------------------
 $( function() {
   var availableTags = [
