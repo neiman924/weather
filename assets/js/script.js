@@ -60,7 +60,7 @@ function getLocation() {
         }, "jsonp");
   }
 }
-//------------------------set the current city location and call search weather fun--------
+//------------------------set the current city location and call search weather function---
 function setDefaultPosition(position) {
   lat = position.coords.latitude;
   lon = position.coords.longitude;
