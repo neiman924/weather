@@ -97,7 +97,7 @@ var appid = '&appid=022143c121bb477d4aec6b482ca51234';
 //1-  http://api.openweathermap.org/geo/1.0/direct?q=seattle&appid=022143c121bb477d4aec6b482ca51234
 //---------------------------searchLatLon--------------------------------------------
 function searchLatLon(cityName) {
-  var QueryUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=';
+  var QueryUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=';
   QueryUrl = QueryUrl + cityName + appid;
   console.log(QueryUrl)
   fetch(QueryUrl)
